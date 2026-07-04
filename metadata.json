@@ -1,0 +1,6 @@
+{
+  "name": "JanAI",
+  "description": "AI-Powered Smart Governance Platform for Indian Communities. Empowering citizens to report civic issues and enabling government departments to analyze, prioritize, and resolve them efficiently.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

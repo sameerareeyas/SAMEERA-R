@@ -1,0 +1,40 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Check if the user document exists and get it
+    function getUserDoc() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid));
+    }
+
+    // Check if the authenticated user has a specific role
+    function isRole(role) {
+      return isAuthenticated() && getUserDoc().data.role == role;
+    }
+
+    // Users rules
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isAuthenticated() && (request.auth.uid == userId || (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && getUserDoc().data.role == "admin"));
+      allow delete: if isAuthenticated() && exists(/databases/$(database)/documents/users/$(request.auth.uid)) && getUserDoc().data.role == "admin";
+    }
+
+    // Complaints rules
+    match /complaints/{complaintId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated();
+      allow delete: if isAuthenticated() && exists(/databases/$(database)/documents/users/$(request.auth.uid)) && getUserDoc().data.role == "admin";
+    }
+
+    // Departments rules
+    match /departments/{departmentId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && exists(/databases/$(database)/documents/users/$(request.auth.uid)) && getUserDoc().data.role == "admin";
+    }
+  }
+}

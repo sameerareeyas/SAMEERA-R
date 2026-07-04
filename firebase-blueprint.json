@@ -1,0 +1,68 @@
+{
+  "entities": {
+    "users": {
+      "title": "User",
+      "description": "User profile with role-based attributes",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "role": { "type": "string", "enum": ["citizen", "officer", "admin"] },
+        "phone": { "type": "string" },
+        "address": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "name", "email", "role"]
+    },
+    "complaints": {
+      "title": "Complaint",
+      "description": "Civic complaint logged by a citizen",
+      "type": "object",
+      "properties": {
+        "complaintId": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "category": { "type": "string" },
+        "department": { "type": "string" },
+        "priority": { "type": "string", "enum": ["Low", "Medium", "High", "Critical"] },
+        "severity": { "type": "number" },
+        "status": { "type": "string", "enum": ["Pending", "Assigned", "In Progress", "Resolved", "Completed"] },
+        "imageUrl": { "type": "string" },
+        "voiceUrl": { "type": "string" },
+        "latitude": { "type": "number" },
+        "longitude": { "type": "number" },
+        "citizenId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["complaintId", "title", "description", "citizenId", "status"]
+    },
+    "departments": {
+      "title": "Department",
+      "description": "Government department in charge of complaints",
+      "type": "object",
+      "properties": {
+        "departmentId": { "type": "string" },
+        "departmentName": { "type": "string" },
+        "officerName": { "type": "string" },
+        "officerEmail": { "type": "string" }
+      },
+      "required": ["departmentId", "departmentName"]
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": "users",
+      "description": "User profile collection indexed by userId"
+    },
+    "complaints/{complaintId}": {
+      "schema": "complaints",
+      "description": "Civic complaints database collection"
+    },
+    "departments/{departmentId}": {
+      "schema": "departments",
+      "description": "Government departments configuration collection"
+    }
+  }
+}
